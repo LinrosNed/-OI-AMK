@@ -10,10 +10,10 @@ from django.contrib.auth.decorators import login_required
 from .checker_class.text_finder import TextAnaliz
 from .checker_class.kma_land import KMALand, Land, PrelandNoAdminError
 from kma.models import OfferPosition, PhoneNumber
-from .models import UserSiteCheckPoint, ActualUserList
+from .models import UserSiteCheckPoint, ActualUserList, CheckerUserSetting
 from .checker_class.check_list_view import CheckListView
 from .checker_class import UrlChecker
-from qr_code.qrcode.utils import QRCodeOptions
+# from qr_code.qrcode.utils import QRCodeOptions
 from django.template import Template
 from django.template import Context, RequestContext
 from bs4 import BeautifulSoup
@@ -33,10 +33,14 @@ def read_check_list():
     return template
 
 @login_required
-def index(requests):
+def index(request):
     # with open(TOOLBAR_STYLES_FILE, encoding='utf-8') as file:
     #     debug_styles = file.read()
-    return render(requests, 'checker_2/index.html')
+    settings = CheckerUserSetting.objects.get(user=request.user)
+    content = {
+        'user_settings':settings,
+    }
+    return render(request, 'checker_2/index.html', content)
 
 @login_required
 def check_url(request):
@@ -44,18 +48,35 @@ def check_url(request):
     url = request.GET['url']
     url = KMALand.format_url(url)
     start = time.time()
+    settings = CheckerUserSetting.objects.get(user=request.user)
+
+    left_bar = request.GET['checker_leftbar']
+    click_elem = request.GET['checker_clickelems']
+    other = request.GET['checker_other_elems']
+    print(left_bar,click_elem,other, 'xxxxxxx')
+    left_bar = True if left_bar.lower() == 'true' else False
+    click_elem = True if click_elem.lower() == 'true' else False
+    other = True if other.lower() == 'true' else False
+    settings.left_bar = left_bar
+    settings.click_elem = click_elem
+    settings.other = other
+    print(left_bar,click_elem,other, 'yyyyyy')
+    settings.save()
+    print(settings)
     try:
         res = req.get(url)
     except ConnectionError:
         content = {
-            'error_text': 'Ссылка не работает'
+            'error_text': 'Ссылка не работает',
+            'user_settings':settings,
         }
         return render(request, 'checker_2/index.html', content)
     end_load_url = time.time()
     print(f'Site Load:{round(end_load_url - start,2)}')
     if res.status_code != 200:
         content = {
-            'error_text': 'Ссылка не работает'
+            'error_text': 'Ссылка не работает',
+            'user_settings':settings,
         }
         return render(request, 'checker_2/index.html', content)
     else:
@@ -65,18 +86,21 @@ def check_url(request):
             content = {
                 'checker': url_checker,
                 'kma': url_checker.land,
-                'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
-                                    # dark_color='#2496ff',
-                                    dark_color='white',
-                                    light_color='#404040',
-                                    ),
+                'user_settings': settings,
+                # 'my_options' : QRCodeOptions(size='20', border=6, error_correction='Q',image_format='png',
+                #                     # dark_color='#2496ff',
+                #                     dark_color='white',
+                #                     light_color='#404040',
+                #                     ),
             }
             end = time.time()
+
             print(f'Total:{round(end - start, 2)}')
             return render(request, 'checker_2/frame.html', content)
         except PrelandNoAdminError:
             content = {
-                'error_text': PrelandNoAdminError.__doc__
+                'error_text': PrelandNoAdminError.__doc__,
+                'user_settings':settings,
             }
             return render(request, 'checker_2/index.html', content)
 
@@ -120,6 +144,7 @@ def analiz_land_text(request):
             'success': True,
             'result': result['old'],
             'new_checker': result['new'],
+            'jeneral_status': result['jeneral_status'],
         }
     except IndentationError as error:
         answer = {

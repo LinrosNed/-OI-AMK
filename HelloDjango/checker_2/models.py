@@ -123,3 +123,12 @@ class UserSiteCheckPoint(models.Model):
     #     return self.text
 
 
+class CheckerUserSetting(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    left_bar = models.BooleanField(default=True, verbose_name='Показывать боковую панель')
+    click_elem = models.BooleanField(default=False, verbose_name='Показывать клик элементы')
+    other = models.BooleanField(default=True, verbose_name='Показывать даты, формы')
+
+    def __str__(self):
+        return f'{self.user}-{self.left_bar}-{self.click_elem}-{self.other}'
+

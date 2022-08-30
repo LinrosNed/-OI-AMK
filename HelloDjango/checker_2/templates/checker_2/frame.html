@@ -31,9 +31,7 @@
 </head>
 
 <body>
-  <div id="qr-modal" style="display: none;">
-    {% qr_from_data kma.url options=my_options %}
-  </div>
+
   <!-- <div id="for-doc" style="display: none;">
     <div id="manual" class="content "></div>
   </div> -->
@@ -57,7 +55,7 @@
         <div class="container-fluid">
           <div class="topbar__row">
 
-            <div class="topbar__items">
+            <div class="topbar__items" style=" margin-left: 7px;border-left: 1px solid rgb(43, 43, 43);">
               <div class="topbar__item">
                 <div class="topbar__burger">
                   <a href="{% url 'checker_2:index' %}" style="display: flex; align-items: center; justify-content: center;">
@@ -97,6 +95,9 @@
               </div>
               <div class="topbar__item">
                 <div class="topbar__btn"><span id="discount">{{kma.discount}}</span>%</div>
+              </div>
+              <div class="topbar__btn" id="jeneral-status" style="display: {%if user_settings.left_bar %}none;{%else%}flex;{%endif%}">
+
               </div>
               <div class="topbar__item">
                 <div id="scripts-img">
@@ -144,9 +145,9 @@
                 </div>
               </div>
 
-              <div class="topbar__item devises">
+              <div class="topbar__item devises" id="devise-width">
                 <div class="topbar__btn" >
-                  1000 PX 80%
+                  <span>1000</span> PX
                 </div>
               </div>
             </div>
@@ -171,12 +172,12 @@
                   <i class="fa-solid fa-rotate-right"></i>
                 </div>
               </div>
-              <div class="topbar__item">
+              <!-- <div class="topbar__item">
                 <div class="topbar__btn qrcode" id="show-qr">
                   QR
                   <i class="fa-solid fa-qrcode"></i>
                 </div>
-              </div>
+              </div> -->
 
             </div>
           </div>
@@ -194,13 +195,14 @@
 
               <div class="leftbar__tool">
                 <div class="leftbar__tool-items">
-                  <div class="leftbar__tool-item navigation-btn active" id="navigator">
+                  <div class="leftbar__tool-item navigation-btn {%if user_settings.left_bar %}active{%endif%}"
+                   id="navigator">
                     <svg data-icon="Navigator" aria-hidden="true" focusable="false" width="21" height="15" viewBox="0 0 21 15" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M15 1H1v3h14V1zM6 6v3h14V6H6zm0 8h14v-3H6v3z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" data-iframe-func="showCkickEmems">
+                  <div class="leftbar__tool-item debug {%if user_settings.click_elem %}active{%endif%}" data-iframe-func="showCkickEmems">
                     <svg data-icon="ShareLarge" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path fill="currentColor" d="M14 11V7.33h-2a3 3 0 00-3 3v3H7v-3a4.998 4.998 0 015-5h2V2l6 4.5-6 4.5z"></path><path fill="currentColor" d="M7.108 4H2a1 1 0 00-1 1v12a1 1 0 001 1h15a1 1 0 001-1v-5.25l-2 1.5V16H3V6h2.272a8.044 8.044 0 011.836-2z"></path></svg>
                   </div>
-                  <div class="leftbar__tool-item debug" data-iframe-func="showFormPriceDate">
+                  <div class="leftbar__tool-item debug {%if user_settings.other %}active{%endif%}" data-iframe-func="showFormPriceDate">
                     <svg data-icon="Commercepanel" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" class="bem-Svg" style="display: block;"><path d="M3.122 2H0V0h4.878L5.4 4H19v6.82L4.647 13.69 3.122 2zM18 20a2 2 0 110-4 2 2 0 010 4zM6 20a2 2 0 110-4 2 2 0 010 4z" fill="currentColor"></path></svg>
                   </div>
                   <div class="leftbar__tool-item" data-iframe-func="removeAllDebug" id="clear-debug">
@@ -208,12 +210,12 @@
                   </div>
                   
                 </div>
-                <div class="leftbar__tool-item">
+                <div class="leftbar__tool-item" id="about" data-manual-link="other.linkchecker">
                   <i class="fa-solid fa-circle-question" style="font-size: 20px;"></i>
                 </div>
               </div>
 
-              <div class="navigation">
+              <div class="navigation" {%if not user_settings.left_bar %} style="display: none; position:absolute;"{%endif%}>
                 <div class="navigation__inner">
                   <div class="navigation__checker">
 
@@ -224,12 +226,15 @@
                         {%endfor%}
                       </div>
                       <div class="container-toolbar" id="analize-load">
-                        <div class="lds-ring" id="load-ring">
+                        <!-- <div class="lds-ring" id="load-ring">
                           <div></div>
                           <div></div>
                           <div></div>
                           <div></div>
-                        </div>
+                        </div> -->
+                        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                        <p>Загрузка сайта</p>
+                        <p style="display: none;">Анализ</p>
                       </div>
                       <div id="text-info">
                       </div>
@@ -274,7 +279,6 @@
                                 data-checkpoint-id="{{sub.id}}">
                                 <input class="form-check-input me-1 " type="checkbox" value="" {%if sub.is_checked%}checked{%endif%}>
                                 {{sub.text}}
-
                               </label> -->
                               {%endfor%}
                             </div>
@@ -302,10 +306,11 @@
                       <i class="fa-solid fa-xmark"></i>
                     </a>
                   </div>
+                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
                   <div class="add-inner__main content" id="manual" >
-                    <p>
+                    <!-- <p>
                       -----LOADING-----
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               </div>
@@ -323,7 +328,6 @@
     </main>
 
   </div>
-
   <script src="js/main.js"></script>
   <script>
     let currentUrl = window.location.origin;
@@ -345,7 +349,14 @@
       if (get_phone_code_api) { getPhoneCode() }
 
       land_code = $(iframe.contentDocument).find('html').html()
-      console.log(land_code.length)
+      $('#analize-load p').first().slideUp(300, function(){
+        $('#analize-load p').last().slideDown(300)
+      })
+
+      // $('#analize-load p').first().slideUp(300)
+      // $('#analize-load p').last().slideDown(300)
+      onActiveDebug()
+      setDeviseWidth()
       loadBackAnalize(land_code)
 
     }
@@ -393,6 +404,7 @@
       }
       let width = devicesWidth[deviseType]
       $('#iframe').css('width', width)
+      setDeviseWidth()
     }
 
 
@@ -448,7 +460,7 @@
             putDataFromAnalize('Слова:', geo_words)
             scripts_on_land = response.result['scripts']
           }
-
+          setJeneralStatus(response['jeneral_status'])
           loadImfoItems(response['new_checker'])
           console.log('End')
           // fixListHeight()
@@ -458,6 +470,23 @@
         }
 
       })
+    }
+
+    // Добавить иконку общего статуса
+    function setJeneralStatus(status){
+      $('#jeneral-status').empty()
+      status_ico = {
+        'info': 'fa-solid fa-circle-chevron-down',
+        'warning': 'fa-solid fa-triangle-exclamation',
+        'error': 'fa-solid fa-circle-exclamation',
+      }
+      if (status == ''){$('#jeneral-status').remove()}
+      else
+      {
+        let elem = $('<i></i>')
+        elem.addClass(status_ico[status])
+        $('#jeneral-status').append(elem)
+      }
     }
 
     function putDataFromAnalize(desc, data) {
@@ -485,15 +514,22 @@
 
     // загрузка документации
     function loadDoc(manual_land){
-      console.log(manual_land)
+      $('.navigation__add-inner .lds-ellipsis').show()
+      $('#navigation-add').show()
+      $('#manual').empty()
       let url = currentUrl + '/checker_2/doc_page/'
       data = {'manual_land': manual_land}
       $.post(url, data,function(response){
         // $('#for-doc').show()
-        $('#navigation-add').show()
-        $('#manual').empty()
           $('#manual').html(response)
+          $('.navigation__add-inner .lds-ellipsis').hide()
       })
+    }
+
+    function setDeviseWidth(){
+      let elem = $('#devise-width span')
+      let width = $('#iframe').css('width').replace('px', '')
+      elem.text(width)
     }
 
   </script>
@@ -520,9 +556,12 @@
   </style>
 
   <script>
-    $('#check_list a').click(function(e){
+
+    // загрузка документации при клике на вопросик
+    $('#check_list a, #about').click(function(e){
       e.preventDefault();
-      $(".navigation__add").slideToggle();
+      // $(".navigation__add").slideToggle();
+      $(".navigation__add").show();
       let manualLink = $(this).attr('data-manual-link');
       loadDoc(manualLink);
     })
@@ -619,41 +658,65 @@
 
 <script src="{% static 'manual/js/main.js' %}"></script>
 <script>
+
+  // при клике на кнопки дебагрежима
   $('.leftbar__tool-item.debug').click(function(){
     $(this).toggleClass('active')
-    let items = $('.leftbar__tool-item.debug.active')
     runFuncIframe('removeAllDebug')
+    onActiveDebug()
+    // $.each(items, function(i){
+    //   let func = $(this).attr('data-iframe-func')
+    //   runFuncIframe(func)
+
+    // })
+  })
+
+  // включить дебаг которые активны
+  function onActiveDebug(){
+    let items = $('.leftbar__tool-item.debug.active')
     $.each(items, function(i){
       let func = $(this).attr('data-iframe-func')
       runFuncIframe(func)
 
     })
-  })
-
+  }
+  // при клике отключить дебаг режим
   $('#clear-debug').click(function(){
     $('.leftbar__tool-item.debug').removeClass('active')
     let cleanFunc = $(this).attr('data-iframe-func')
     runFuncIframe(cleanFunc)
   })
 
+  // изменение режима отображения большой боковой панели
   $('#navigator').click(function(){
     if ($(this).hasClass('active')){
       $('.navigation').css('position', 'absolute')
       $(this).removeClass('active')
-      // $('.navigation').hide()
+      $('#jeneral-status').show()
+      // $('#jeneral-status').css('display', 'flex')
+      setDeviseWidth()
     } else {
       $('.navigation').css('position', 'static')
       $(this).addClass('active')
       $('.navigation').show()
+      $('#jeneral-status').hide()
+      setDeviseWidth()
     }
   })
 
+  // при наведении на добовую панель
   $('.leftbar').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').show()}
-    
+    if (!$('#navigator').hasClass('active')){
+      $('.navigation').show()
+      $('#jeneral-status i').hide()
+    }
   })
+  // при наведении на окно фрейма
   $('#iframe').hover(function(){
-    if (!$('#navigator').hasClass('active')){$('.navigation').hide()}
+    if (!$('#navigator').hasClass('active')){
+      $('.navigation, #navigation-add').hide()
+      $('#jeneral-status i').show()
+    }
   })
 
 
@@ -714,6 +777,7 @@
   }
 </style>
 <style>
+
   .topbar__btn{
     padding: 6px;
     display: flex;
@@ -743,25 +807,82 @@
   }
 </style>
 <style>
-  #qr-modal{
-    position: absolute;
-    top: 5.5%;
-    left: 33%;
-    /* border: 1px solid rgb(43, 43, 43); */
+  .navigation__add-inner .lds-ellipsis{
+    margin: 0 10px;
+    margin-top: 5px;
   }
-  #qr-modal img{
-    width: 500px;
+
+  .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 16px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 4px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 4px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 16px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 28px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
   }
-</style>
-<script>
-/*   $('#show-qr').click(function(){
-    $('#qr-modal').show()
-  }) */
-  $("#show-qr").on("click", function(e){
-      e.preventDefault();
-      $("#qr-modal").slideToggle();
-  });
-</script>
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(12px, 0);
+  }
+}
+  </style>
+  <style>
+    /* 123 */
+    #analize-load{
+      display: flex;
+      align-items: center;
+      color: aliceblue;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    #devise-width span{
+      font-weight: 600;
+      margin-right: 3px;
+    }
+  </style>
 </body>
 
 </html>

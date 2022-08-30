@@ -100,6 +100,7 @@ body {
   height: 100%;
   border-bottom: 1px solid rgb(43, 43, 43);
   overflow: hidden;
+  z-index: 5;
 }
 .main{
   flex: 1 0 auto;
@@ -331,9 +332,22 @@ margin: 0 5px;
   /* border-top: none;
   border-bottom: none; */
   width: 60px;
+  margin-left: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.topbar__logo {
+  display: none;
+}
+.topbar__burger-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 18px;
+  color: azure;
+  text-align: center;
 }
 .topbar__items {
-  /* width: 100%; */
+    /* width: 100%; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,7 +395,7 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
   font-size: 17px;
 }
 .topbar__btn i:hover{
-  color: #ffffff;
+  /* color: #ffffff; */
   opacity: 0.8;
 }
 .topbar__btn a{
@@ -437,15 +451,16 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
   border-left: 7px solid  #fc5f2e;
 }
 
-.info-block.warning i{
+i.fa-triangle-exclamation{
   color:#fcd62e;
 }
-.info-block.info i{
+i.fa-circle-chevron-down{
   color:#62a5ff;
 }
-.info-block.error i{
+i.fa-circle-exclamation{
   color:#fc5f2e;
 }
+
 /* ------------------------------------------- */
 
 
@@ -555,7 +570,7 @@ body > div.wrapper > header > div > div > div > div:nth-child(1) > div:nth-child
 .add-inner__lock{
   color: #f1f1f1;
   cursor: pointer !important; 
-  padding: 5px 20px;
+  padding: 5px 10px;
 }
 .add-inner__head{
   display: flex;

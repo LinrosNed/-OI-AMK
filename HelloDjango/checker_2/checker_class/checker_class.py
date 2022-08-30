@@ -285,9 +285,20 @@ class UrlChecker:
             check = check(land=land, text_finder_result=analizer.result)
             check.process()
             messages += check.messages
+        statuses = set()
+        for m in messages:
+            statuses.add(m['status'])
+        jeneral_status = ''
+        if Check.INFO in statuses:
+            jeneral_status = Check.INFO
+        if Check.WARNING in statuses:
+            jeneral_status = Check.WARNING
+        if Check.ERROR in statuses:
+            jeneral_status = Check.ERROR
         result = {
             'old': old_analizer_result,
             'new': messages,
+            'jeneral_status': jeneral_status
         }
         return result
 

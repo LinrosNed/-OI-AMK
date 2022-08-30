@@ -25,7 +25,6 @@ class CheckListView:
         return block
 
     def is_need_add(self, check_point):
-        print(self.land_type, 'xxxxxx')
         if check_point.land_type in [self.land_type, None] and \
                 check_point.discount_type in [self.discount_type, None] and \
                 (self.country in check_point.for_geo or check_point.for_geo == '') and \

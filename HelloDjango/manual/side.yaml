@@ -53,6 +53,7 @@
         - Рип промо: tasks.rip_promo
         - Правки промо: tasks.rip_promo_check
 - Прочее:
+    - LinkChecker: other.linkchecker
     - Глоссарий: other.glossary
     - Хаки: other.haks
     - Элементы документации: other.examples

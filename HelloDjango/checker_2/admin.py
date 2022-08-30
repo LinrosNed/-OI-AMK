@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CheckPoint, CheckBlock
+from .models import CheckPoint, CheckBlock, CheckerUserSetting
 from ordered_model.admin import OrderedModelAdmin
 
 
@@ -27,4 +27,4 @@ class CheckPointAdmin(OrderedModelAdmin):
 admin.site.register(CheckPoint, CheckPointAdmin)
 admin.site.register(CheckBlock, CheckBlockAdmin)
 # admin.site.register(Main, MainAdmin)
-# admin.site.register(Sub, SubAdmin)
+admin.site.register(CheckerUserSetting)

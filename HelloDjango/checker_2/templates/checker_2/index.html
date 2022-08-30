@@ -5,41 +5,6 @@
 <div class="main-wrapper">
     <h1>LinkChecker v2</h1>
     <div id="for-logo">
-        <!-- <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-           viewBox="0 0 748.000000 769.000000"
-          preserveAspectRatio="xMidYMid meet">
-         
-         <g transform="translate(0.000000,769.000000) scale(0.100000,-0.100000)"
-         fill="#ebebeb" stroke="none">
-         <path d="M2940 7684 c-605 -43 -1180 -253 -1659 -606 -582 -429 -1010 -1062
-         -1181 -1748 -73 -295 -93 -460 -94 -775 0 -303 20 -482 85 -753 160 -660 539
-         -1258 1074 -1693 368 -300 819 -519 1285 -624 242 -55 375 -69 675 -69 304 -1
-         393 7 639 56 406 80 747 223 1149 482 15 9 143 -115 980 -951 529 -528 972
-         -966 984 -972 33 -16 103 -13 166 8 166 54 343 228 407 397 25 67 27 160 4
-         194 -9 14 -440 449 -957 966 l-940 942 94 125 c128 170 208 301 305 497 127
-         254 208 493 263 767 48 245 56 334 55 638 0 300 -14 434 -69 675 -203 900
-         -806 1680 -1621 2097 -345 177 -665 276 -1059 328 -116 16 -472 27 -585 19z
-         m440 -534 c489 -47 961 -230 1330 -514 250 -192 438 -392 604 -645 92 -138
-         205 -355 256 -491 18 -47 36 -94 40 -105 12 -29 44 -141 55 -190 2 -5 10 -39
-         18 -75 46 -187 52 -255 52 -580 0 -338 -5 -384 -62 -620 -23 -95 -72 -255 -93
-         -305 -5 -11 -30 -69 -55 -130 -241 -568 -769 -1094 -1334 -1331 -58 -25 -115
-         -49 -126 -54 -86 -38 -324 -103 -490 -133 -108 -20 -153 -22 -440 -22 -335 1
-         -365 4 -616 59 -98 22 -323 99 -430 147 -278 124 -547 305 -773 518 -95 90
-         -271 304 -358 436 -239 362 -375 756 -419 1210 -14 144 -5 472 16 600 10 55
-         18 107 19 115 6 42 21 107 52 219 168 605 563 1141 1094 1483 280 180 539 287
-         895 368 49 12 244 39 305 43 95 7 379 5 460 -3z"/>
-         <path d="M2850 6124 c-264 -34 -514 -124 -715 -258 -507 -337 -811 -1014 -860
-         -1921 -18 -317 70 -502 273 -578 49 -18 78 -22 202 -22 176 0 279 23 513 114
-         555 216 1209 215 1757 -4 179 -72 316 -105 457 -112 300 -15 461 101 510 369
-         44 245 -46 866 -179 1233 -256 704 -721 1096 -1401 1180 -147 18 -413 18 -557
-         -1z m796 -983 c47 -27 99 -81 151 -156 23 -33 88 -188 97 -232 4 -16 9 -39 12
-         -53 11 -54 4 -149 -14 -196 -15 -37 -29 -55 -58 -71 -48 -28 -63 -28 -117 -3
-         -89 42 -170 145 -233 298 -33 78 -37 99 -41 202 -6 134 7 178 66 217 45 30 75
-         29 137 -6z m-959 -1 c18 -10 42 -38 54 -61 19 -37 21 -55 17 -143 -10 -216
-         -138 -451 -281 -514 -49 -22 -65 -21 -126 11 -54 28 -81 164 -55 279 45 197
-         159 379 269 429 52 24 82 24 122 -1z"/>
-         </g>
-         </svg> -->
          <img src="{% static 'checker_2/scripts/logo_2.png' %}">
     </div>
     <div class="form-wrapper">
@@ -54,12 +19,55 @@
             <label>Url для проверки:</label>
             {% csrf_token %}
             <input type="url" name="url" class="form-control" required placeholder="Введите url">
+            <input type="hidden" id="checker_leftbar" value="{{user_settings.left_bar}}" name="checker_leftbar">
+            <input type="hidden" id="checker_clickelems" value="{{user_settings.click_elem}}" name="checker_clickelems">
+            <input type="hidden" id="checker_other_elems" value="{{user_settings.other}}" name="checker_other_elems">
             <button class="btn btn-primary">Проверить</button>
         </form>
     </div>
     
 </div>
+<div id="settings">
+    <i class="fa-solid fa-gear"></i>
+    <form style="">
+        <div>
+            <input type="checkbox" id="leftbar"  
+            {%if user_settings.left_bar%}checked{%endif%}
+            >
+            <label for="leftbar">Показывать панель</label>
+        </div>
+        <div>
+            <input type="checkbox" id="clickelems" 
+            {%if user_settings.click_elem%}checked{%endif%}
+            >
+            <label for="clickelems">Кликабельные элементы</label>
+        </div>
+        <div>
+            <input type="checkbox" id="other_elems"
+            {%if user_settings.other%}checked{%endif%}
+            >
+             <label for="other_elems">Даты, Формы и Цены</label>
+        </div>
+    </form>
+</div>
+<script>
+    $('#settings').hover(function(){
+        $(this).addClass('active')
+        // $('#settings i').hide()
+        // $('#settings form').show()
+    })
+    $('.main-wrapper').hover(function(){
+        $('#settings').removeClass('active')
+    })
 
+    $('#settings').click(function(){
+        let inputs = $('#settings input')
+        $.each(inputs,function(){
+            let id = 'checker_' + $(this).attr('id')
+            let input = $('#'+id).val($(this).is(':checked'))
+        })
+    })
+</script>
 <style>
     #for-logo{
         margin-top: 30px;
@@ -104,7 +112,7 @@
         text-transform: uppercase;
     }
     form#url-for-check input{
-        padding: 0px 4px 0px 24px;
+    padding: 0px 4px 0px 24px;
     border-width: 1px;
     border-style: solid;
     border-color: rgb(33, 33, 33);
@@ -137,6 +145,49 @@
     form#url-for-check button:hover{
         background: #0080ff;
         color: white;
+    }
+
+    #settings{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        bottom: 50px;
+        right: 50px;
+        border: 2px solid #ebebeb;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+    }
+    #settings.active{
+        width: 200px;
+        height: 100px;
+        font-size: 11px;
+        border-radius: 0px;
+    }
+    #settings i{
+        display: block;
+        color:  #ebebeb;
+        font-size: 18px;
+    }
+    #settings.active i{
+        display: none;
+    }
+    #settings form div{
+        display: flex;
+        align-items: center;
+        color:#ebebeb;
+        text-transform: uppercase;
+    }
+    #settings form{
+        display: none;
+    }
+    #settings.active form{
+        display: block;
+        margin: 0;
+    }
+    #settings form input{
+        margin-right: 3px;
     }
 </style>
 
